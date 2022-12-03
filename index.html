@@ -2,11 +2,42 @@
 <html lang="en">
   <head>
     <title></title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="style.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;800&family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="style.css" rel="stylesheet" />
   </head>
   <body>
-  
+    <header>
+      <h1>Library</h1>
+    </header>
+    <section class="books-display"></section>
+    <section>
+      <form>
+        <div>
+          <label for="book-name">Name</label>
+          <input id="book-name" type="text" required />
+        </div>
+        <div>
+          <label for="book-author">Author</label>
+          <input id="book-author" type="text" required />
+        </div>
+        <div>
+          <label for="book-pages">Pages</label>
+          <input id="book-pages" type="number" required />
+        </div>
+        <div>
+          <label for="has-read">Have you read it?</label>
+          <input id="has-read" type="checkbox" />
+        </div>
+        <button>Add Book</button>
+      </form>
+    </section>
+    <script src="script.js"></script>
   </body>
 </html>

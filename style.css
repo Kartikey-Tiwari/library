@@ -1,0 +1,33 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+header {
+  height: 15vh;
+  background-color: #f0dbdb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 10px 0 rgb(0, 0, 0, 0.2);
+}
+
+h1 {
+  font-size: 48px;
+  font-weight: 800;
+}
+
+.card {
+  font-size: 20px;
+}
+
+.books-display {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+/*
+form {
+display: none;
+}
+*/
