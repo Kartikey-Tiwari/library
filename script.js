@@ -20,10 +20,23 @@ function hideModal() {
   overlay.classList.add("hidden");
 }
 
-form_button.addEventListener("click", (e) => {
+form_modal.addEventListener("submit", (e) => {
   e.preventDefault();
   hideModal();
   myLib.addBook();
+});
+
+const fields = Array.from(form_modal.elements);
+fields.forEach((field) => {
+  field.addEventListener("input", (e) => {
+    if (!field.checkValidity()) {
+      field.classList.add("invalid");
+      field.classList.remove("valid");
+    } else {
+      field.classList.remove("invalid");
+      field.classList.add("valid");
+    }
+  });
 });
 
 add_book_button.addEventListener("click", showModal);
