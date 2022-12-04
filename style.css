@@ -66,9 +66,12 @@ h1 {
   align-items: center;
 }
 
-.modal div input {
+input {
+  outline: none;
+  border: 2px black solid;
   padding: 5px;
   flex: 1;
+  border-radius: 10px;
 }
 
 .modal div label {
@@ -117,4 +120,12 @@ h1 {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.invalid {
+  border: 2px solid red;
+}
+
+.valid {
+  border: 2px solid green;
 }
