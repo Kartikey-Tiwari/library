@@ -1,7 +1,16 @@
 * {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
   font-family: "Nunito Sans", sans-serif;
+}
+
+form,
+input,
+button,
+label {
+  font-family: inherit;
+  font-size: 24px;
 }
 
 header {
@@ -20,14 +29,92 @@ h1 {
 
 .card {
   font-size: 20px;
+  display: grid;
+  justify-content: center;
+  background-color: #dae2b6;
+  border-radius: 10px;
+  min-width: 300px;
 }
 
 .books-display {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  padding: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
-/*
-form {
-display: none;
+
+.hidden {
+  display: none;
 }
-*/
+
+.modal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  padding: 20px;
+  background-color: white;
+  border-radius: 20px;
+  align-items: flex-end;
+}
+
+.modal div {
+  margin-bottom: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.modal div input {
+  padding: 5px;
+  flex: 1;
+}
+
+.modal div label {
+  width: 100px;
+  text-align: right;
+}
+
+.modal div label[for="has-read"] {
+  width: auto;
+  margin-left: auto;
+}
+
+.modal div input[type="checkbox"] {
+  flex-grow: 0;
+  display: inline-block;
+  flex-basis: 24px;
+  appearance: none;
+  height: 24px;
+  border: 1px grey solid;
+  margin: 0 10px;
+  position: relative;
+}
+
+.modal div input[type="checkbox"]:checked::before {
+  content: "✓";
+  position: absolute;
+  inset: 0;
+  top: -4px;
+  left: 1px;
+}
+
+.modal div:last-child {
+  justify-content: center;
+}
+
+.modal div button {
+  padding: 5px;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+}

@@ -3,14 +3,31 @@ const author_input = document.querySelector("#book-author");
 const num_pages_input = document.querySelector("#book-pages");
 const has_read_input = document.querySelector("#has-read");
 const book_display = document.querySelector(".books-display");
+const form_modal = document.querySelector(".modal");
+const overlay = document.querySelector(".overlay");
 const form_button = document.querySelector("form button");
+const add_book_button = document.querySelector(".btnAddBook");
 
 const myLib = new Library();
 
+function showModal() {
+  form_modal.classList.remove("hidden");
+  overlay.classList.remove("hidden");
+}
+
+function hideModal() {
+  form_modal.classList.add("hidden");
+  overlay.classList.add("hidden");
+}
+
 form_button.addEventListener("click", (e) => {
   e.preventDefault();
+  hideModal();
   myLib.addBook();
 });
+
+add_book_button.addEventListener("click", showModal);
+overlay.addEventListener("click", hideModal);
 
 function Library(books = new Map()) {
   this.books = books;
@@ -29,6 +46,7 @@ Library.prototype.addBook = function () {
   const newBook = new Book(name, author, pages, has_read);
   createBookCard(newBook);
   this.books.set(this.cur_book_key++, newBook);
+  this.totalBooks++;
 };
 
 function Book(title, author, pages, haveRead) {

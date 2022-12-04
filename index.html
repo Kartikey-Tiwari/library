@@ -15,10 +15,11 @@
   <body>
     <header>
       <h1>Library</h1>
+      <button class="btnAddBook">Add a book +</button>
     </header>
     <section class="books-display"></section>
     <section>
-      <form>
+      <form class="modal hidden">
         <div>
           <label for="book-name">Name</label>
           <input id="book-name" type="text" required />
@@ -35,8 +36,9 @@
           <label for="has-read">Have you read it?</label>
           <input id="has-read" type="checkbox" />
         </div>
-        <button>Add Book</button>
+        <div><button>Add Book</button></div>
       </form>
+      <div class="overlay hidden"></div>
     </section>
     <script src="script.js"></script>
   </body>
