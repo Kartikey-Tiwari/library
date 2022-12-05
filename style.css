@@ -18,7 +18,7 @@ header {
   background-color: #f0dbdb;
   display: flex;
   align-items: center;
-  box-shadow: 0 5px 10px 0 rgb(0, 0, 0, 0.2);
+  box-shadow: 5px 5px 10px 0 rgb(0, 0, 0, 0.2);
   text-align: center;
   padding: 20px;
   margin: 5px;
@@ -48,11 +48,12 @@ header button:hover {
   font-size: 20px;
   display: grid;
   justify-items: center;
+  align-content: space-between;
   gap: 10px;
-  text-align: center;
   background-color: #dae2b6;
   border-radius: 10px;
   padding: 10px;
+  box-shadow: 5px 5px 10px 0 rgb(0, 0, 0, 0.2);
 }
 
 .card button {
@@ -95,8 +96,13 @@ header button:hover {
 .modal div {
   margin-bottom: 10px;
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  align-items: center;
+}
+
+.modal .checkbox {
+  justify-content: center;
+  flex-direction: row;
 }
 
 input {
@@ -105,16 +111,6 @@ input {
   padding: 5px;
   flex: 1;
   border-radius: 10px;
-}
-
-.modal div label {
-  width: 100px;
-  text-align: right;
-}
-
-.modal div label[for="has-read"] {
-  width: auto;
-  margin-left: auto;
 }
 
 .modal div input[type="checkbox"] {
@@ -134,10 +130,6 @@ input {
   inset: 0;
   top: -4px;
   left: 1px;
-}
-
-.modal div:last-child {
-  justify-content: center;
 }
 
 .modal div button {

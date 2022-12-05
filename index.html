@@ -21,7 +21,7 @@
     <section>
       <form class="modal hidden">
         <div>
-          <label for="book-name">Name</label>
+          <label for="book-name">Title</label>
           <input id="book-name" type="text" required />
         </div>
         <div>
@@ -30,11 +30,11 @@
         </div>
         <div>
           <label for="book-pages">Pages</label>
-          <input id="book-pages" type="number" required />
+          <input id="book-pages" type="number" min="24" required />
         </div>
-        <div>
+        <div class="checkbox">
           <label for="has-read">Have you read it?</label>
-          <input id="has-read" type="checkbox" />
+          <input id="has-read" type="checkbox" value="unread" />
         </div>
         <div><button>Add Book</button></div>
       </form>
