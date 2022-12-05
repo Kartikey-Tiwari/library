@@ -20,6 +20,14 @@ function hideModal() {
   overlay.classList.add("hidden");
 }
 
+has_read_input.addEventListener("input", (e) => {
+  if (has_read_input.checked) {
+    has_read_input.value = "read";
+  } else {
+    has_read_input.value = "unread";
+  }
+});
+
 form_modal.addEventListener("submit", (e) => {
   e.preventDefault();
   hideModal();
@@ -60,6 +68,17 @@ Library.prototype.addBook = function () {
   createBookCard(newBook);
   this.books.set(this.cur_book_key++, newBook);
   this.totalBooks++;
+
+  name_input.value = "";
+  author_input.value = "";
+  num_pages_input.value = "";
+  has_read_input.value = "unread";
+  fields.forEach((field) => {
+    field.classList.remove("valid");
+    if (field.checked) {
+      field.checked = false;
+    }
+  });
 };
 
 function Book(title, author, pages, haveRead) {
@@ -79,16 +98,17 @@ function createBookCard(book) {
   card.classList.add("card");
   card.dataset.key = myLib.cur_book_key;
 
-  const book_name = document.createElement("h2");
+  const book_name = document.createElement("span");
   book_name.textContent = book.title;
 
-  const book_author = document.createElement("h3");
+  const book_author = document.createElement("span");
   book_author.textContent = book.author;
 
-  const book_pages = document.createElement("h4");
+  const book_pages = document.createElement("span");
   book_pages.textContent = book.pages;
 
-  const book_read = document.createElement("span");
+  const book_read = document.createElement("button");
+  book_read.classList.add(book.haveRead === "read" ? "btnRead" : "btnUnread");
   book_read.textContent = book.haveRead;
 
   card.append(book_name, book_author, book_pages, book_read);
