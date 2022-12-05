@@ -18,28 +18,61 @@ header {
   background-color: #f0dbdb;
   display: flex;
   align-items: center;
-  justify-content: center;
   box-shadow: 0 5px 10px 0 rgb(0, 0, 0, 0.2);
+  text-align: center;
+  padding: 20px;
+  margin: 5px;
+  border-radius: 5px;
 }
 
 h1 {
   font-size: 48px;
+  flex: 1;
   font-weight: 800;
+}
+
+header button {
+  font-size: 20px;
+  padding: 5px;
+  border: 2px solid pink;
+  border-radius: 10px;
+  background: linear-gradient(to right, pink, #f985f0, pink);
+}
+
+header button:hover {
+  background: linear-gradient(to right, #d92ad9, #f985f0, #d92ad9);
+  border: 2px solid purple;
 }
 
 .card {
   font-size: 20px;
   display: grid;
-  justify-content: center;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
   background-color: #dae2b6;
   border-radius: 10px;
-  min-width: 300px;
+  padding: 10px;
+}
+
+.card button {
+  width: 70%;
+  border: none;
+  border-radius: 5px;
+}
+
+.btnRead {
+  background-color: green;
+}
+
+.btnUnread {
+  background-color: red;
 }
 
 .books-display {
   padding: 32px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
 }
 
