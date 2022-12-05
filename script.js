@@ -3,10 +3,16 @@ const author_input = document.querySelector("#book-author");
 const num_pages_input = document.querySelector("#book-pages");
 const has_read_input = document.querySelector("#has-read");
 const book_display = document.querySelector(".books-display");
-const form_modal = document.querySelector(".modal");
+const form_modal = document.querySelector("form.modal");
 const overlay = document.querySelector(".overlay");
 const form_button = document.querySelector("form button");
 const add_book_button = document.querySelector(".btnAddBook");
+const stats_modal = document.querySelector(".user-stats");
+const show_stats_button = document.querySelector(".btnShowStats");
+const total_books = document.querySelector(".totalBooks");
+const read_books = document.querySelector(".readBooks");
+const unread_books = document.querySelector(".unreadBooks");
+let curActiveModal;
 
 const myLib = {
   books: new Map(),
@@ -22,10 +28,16 @@ const myLib = {
 
     const newBook = new Book(name, author, pages, has_read);
     createBookCard(newBook);
-    if (has_read === "read") this.booksRead++;
-    else this.booksUnread++;
+    if (has_read === "read") {
+      this.booksRead++;
+      read_books.textContent = this.booksRead;
+    } else {
+      this.booksUnread++;
+      unread_books.textContent = this.booksUnread;
+    }
     this.books.set(this.cur_book_key++, newBook);
     this.totalBooks++;
+    total_books.textContent = this.totalBooks;
 
     name_input.value = "";
     author_input.value = "";
@@ -41,12 +53,12 @@ const myLib = {
 };
 
 function showModal() {
-  form_modal.classList.remove("hidden");
+  curActiveModal.classList.remove("hidden");
   overlay.classList.remove("hidden");
 }
 
 function hideModal() {
-  form_modal.classList.add("hidden");
+  curActiveModal.classList.add("hidden");
   overlay.classList.add("hidden");
 }
 
@@ -77,7 +89,15 @@ fields.forEach((field) => {
   });
 });
 
-add_book_button.addEventListener("click", showModal);
+show_stats_button.addEventListener("click", (e) => {
+  curActiveModal = stats_modal;
+  showModal();
+});
+
+add_book_button.addEventListener("click", (e) => {
+  curActiveModal = form_modal;
+  showModal();
+});
 overlay.addEventListener("click", hideModal);
 
 function Book(title, author, pages, haveRead) {
@@ -125,16 +145,21 @@ function createBookCard(book) {
       myLib.booksUnread--;
       myLib.books.get(+card.dataset.key).haveRead = "read";
     }
+    read_books.textContent = myLib.booksRead;
+    unread_books.textContent = myLib.booksUnread;
   });
 
   const remove_btn = document.createElement("button");
   remove_btn.textContent = "Remove";
   remove_btn.addEventListener("click", (e) => {
     myLib.totalBooks--;
+    total_books.textContent = myLib.totalBooks;
     if (myLib.books.get(+card.dataset.key).haveRead) {
       myLib.booksRead--;
+      read_books.textContent = myLib.booksRead;
     } else {
       myLib.booksUnread--;
+      unread_books.textContent = myLib.booksUnread;
     }
     myLib.books.delete(+card.dataset.key);
     card.remove();

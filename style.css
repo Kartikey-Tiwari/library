@@ -10,29 +10,29 @@ input,
 button,
 label {
   font-family: inherit;
-  font-size: 24px;
+  font-size: 20px;
 }
 
 header {
-  height: 15vh;
   background-color: #f0dbdb;
   display: flex;
   align-items: center;
   box-shadow: 5px 5px 10px 0 rgb(0, 0, 0, 0.2);
   text-align: center;
-  padding: 20px;
+  padding: 5px;
   margin: 5px;
   border-radius: 5px;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
 h1 {
-  font-size: 48px;
-  flex: 1;
+  font-size: 40px;
   font-weight: 800;
+  flex-basis: 100%;
 }
 
 header button {
-  font-size: 20px;
   padding: 5px;
   border: 2px solid pink;
   border-radius: 10px;
@@ -113,6 +113,11 @@ input {
   border-radius: 10px;
 }
 
+input[type="text"],
+input[type="number"] {
+  width: 250px;
+}
+
 .modal div input[type="checkbox"] {
   flex-grow: 0;
   display: inline-block;
@@ -145,6 +150,19 @@ input {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
+}
+
+.user-stats {
+  font-size: 20px;
+  width: 270px;
+}
+
+.readBooks {
+  color: green;
+}
+
+.unreadBooks {
+  color: red;
 }
 
 .invalid {
