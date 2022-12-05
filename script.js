@@ -66,7 +66,7 @@ Library.prototype.addBook = function () {
 
   const newBook = new Book(name, author, pages, has_read);
   createBookCard(newBook);
-  if (has_read) this.booksRead++;
+  if (has_read === "read") this.booksRead++;
   else this.booksUnread++;
   this.books.set(this.cur_book_key++, newBook);
   this.totalBooks++;
@@ -101,17 +101,34 @@ function createBookCard(book) {
   card.dataset.key = myLib.cur_book_key;
 
   const book_name = document.createElement("span");
-  book_name.textContent = book.title;
+  book_name.textContent = "📔 " + book.title;
 
   const book_author = document.createElement("span");
-  book_author.textContent = book.author;
+  book_author.textContent = "✍️ " + book.author;
 
   const book_pages = document.createElement("span");
-  book_pages.textContent = book.pages;
+  book_pages.textContent = "📄 " + book.pages + " pages";
 
   const book_read = document.createElement("button");
   book_read.classList.add(book.haveRead === "read" ? "btnRead" : "btnUnread");
   book_read.textContent = book.haveRead;
+  book_read.addEventListener("click", (e) => {
+    if (book_read.textContent === "read") {
+      book_read.textContent = "unread";
+      book_read.classList.add("btnUnread");
+      book_read.classList.remove("btnRead");
+      myLib.booksUnread++;
+      myLib.booksRead--;
+      myLib.books.get(+card.dataset.key).haveRead = "unread";
+    } else {
+      book_read.textContent = "read";
+      book_read.classList.add("btnRead");
+      book_read.classList.remove("btnUnread");
+      myLib.booksRead++;
+      myLib.booksUnread--;
+      myLib.books.get(+card.dataset.key).haveRead = "read";
+    }
+  });
 
   const remove_btn = document.createElement("button");
   remove_btn.textContent = "Remove";
