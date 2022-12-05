@@ -8,7 +8,37 @@ const overlay = document.querySelector(".overlay");
 const form_button = document.querySelector("form button");
 const add_book_button = document.querySelector(".btnAddBook");
 
-const myLib = new Library();
+const myLib = {
+  books: new Map(),
+  booksRead: 0,
+  booksUnread: 0,
+  totalBooks: 0,
+  cur_book_key: 0,
+  addBook: function () {
+    const name = name_input.value;
+    const author = author_input.value;
+    const pages = num_pages_input.value;
+    const has_read = has_read_input.value;
+
+    const newBook = new Book(name, author, pages, has_read);
+    createBookCard(newBook);
+    if (has_read === "read") this.booksRead++;
+    else this.booksUnread++;
+    this.books.set(this.cur_book_key++, newBook);
+    this.totalBooks++;
+
+    name_input.value = "";
+    author_input.value = "";
+    num_pages_input.value = "";
+    has_read_input.value = "unread";
+    fields.forEach((field) => {
+      field.classList.remove("valid");
+      if (field.checked) {
+        field.checked = false;
+      }
+    });
+  },
+};
 
 function showModal() {
   form_modal.classList.remove("hidden");
@@ -49,39 +79,6 @@ fields.forEach((field) => {
 
 add_book_button.addEventListener("click", showModal);
 overlay.addEventListener("click", hideModal);
-
-function Library(books = new Map()) {
-  this.books = books;
-  this.booksRead = 0;
-  this.booksUnread = 0;
-  this.totalBooks = 0;
-  this.cur_book_key = 0;
-}
-
-Library.prototype.addBook = function () {
-  const name = name_input.value;
-  const author = author_input.value;
-  const pages = num_pages_input.value;
-  const has_read = has_read_input.value;
-
-  const newBook = new Book(name, author, pages, has_read);
-  createBookCard(newBook);
-  if (has_read === "read") this.booksRead++;
-  else this.booksUnread++;
-  this.books.set(this.cur_book_key++, newBook);
-  this.totalBooks++;
-
-  name_input.value = "";
-  author_input.value = "";
-  num_pages_input.value = "";
-  has_read_input.value = "unread";
-  fields.forEach((field) => {
-    field.classList.remove("valid");
-    if (field.checked) {
-      field.checked = false;
-    }
-  });
-};
 
 function Book(title, author, pages, haveRead) {
   this.title = title;
