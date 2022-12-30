@@ -14,43 +14,80 @@ const read_books = document.querySelector(".readBooks");
 const unread_books = document.querySelector(".unreadBooks");
 let curActiveModal;
 
-const myLib = {
-  books: new Map(),
-  booksRead: 0,
-  booksUnread: 0,
-  totalBooks: 0,
-  cur_book_key: 0,
-  addBook: function () {
-    const name = name_input.value;
-    const author = author_input.value;
-    const pages = num_pages_input.value;
-    const has_read = has_read_input.value;
+class Library {
+  #books = new Map();
+  #_booksRead = 0;
+  #_booksUnread = 0;
+  get booksRead() {
+    return this.#_booksRead;
+  }
+  get booksUnread() {
+    return this.#_booksUnread;
+  }
+  get totalBooks() {
+    return this.#books.size;
+  }
 
-    const newBook = new Book(name, author, pages, has_read);
-    createBookCard(newBook);
-    if (has_read === "read") {
-      this.booksRead++;
-      read_books.textContent = this.booksRead;
+  addBook(book, key) {
+    this.#books.set(key, book);
+    if (book.haveRead === "read") this.#_booksRead++;
+    else this.#_booksUnread++;
+  }
+  removeBook(bookKey) {
+    if (this.#books.get(bookKey).haveRead === "read") this.#_booksRead--;
+    else this.#_booksUnread--;
+    this.#books.delete(bookKey);
+  }
+  update(bookKey) {
+    const status = this.#books.get(bookKey).haveRead;
+    this.#books.get(bookKey).haveRead = status === "read" ? "unread" : "read";
+    if (status === "read") {
+      this.#_booksUnread++;
+      this.#_booksRead--;
     } else {
-      this.booksUnread++;
-      unread_books.textContent = this.booksUnread;
+      this.#_booksUnread--;
+      this.#_booksRead++;
     }
-    this.books.set(this.cur_book_key++, newBook);
-    this.totalBooks++;
-    total_books.textContent = this.totalBooks;
+  }
+  contains(bookKey) {
+    return this.#books.has(bookKey);
+  }
+}
 
-    name_input.value = "";
-    author_input.value = "";
-    num_pages_input.value = "";
-    has_read_input.value = "unread";
-    fields.forEach((field) => {
+const myLib = new Library();
+
+class Book {
+  constructor(title, author, pages, haveRead) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.haveRead = haveRead;
+  }
+
+  info() {
+    return `${this.title} by ${this.author}, ${this.pages} pages, ${
+      this.haveRead ? "read" : "not read yet"
+    }`;
+  }
+}
+
+const formFields = Array.from(form_modal.elements);
+formFields.forEach((field) => {
+  field.addEventListener("input", (e) => {
+    if (!field.checkValidity()) {
+      field.classList.add("invalid");
       field.classList.remove("valid");
-      if (field.checked) {
-        field.checked = false;
-      }
-    });
-  },
-};
+    } else {
+      field.classList.remove("invalid");
+      field.classList.add("valid");
+    }
+  });
+  field.addEventListener("blur", () => {
+    if (!field.checkValidity()) {
+      field.classList.add("invalid");
+    }
+  });
+});
 
 function showModal() {
   curActiveModal.classList.remove("hidden");
@@ -62,6 +99,18 @@ function hideModal() {
   overlay.classList.add("hidden");
 }
 
+show_stats_button.addEventListener("click", () => {
+  curActiveModal = stats_modal;
+  showModal();
+});
+
+add_book_button.addEventListener("click", () => {
+  curActiveModal = form_modal;
+  showModal();
+});
+
+overlay.addEventListener("click", hideModal);
+
 has_read_input.addEventListener("input", (e) => {
   if (has_read_input.checked) {
     has_read_input.value = "read";
@@ -70,52 +119,47 @@ has_read_input.addEventListener("input", (e) => {
   }
 });
 
-form_modal.addEventListener("submit", (e) => {
-  e.preventDefault();
-  hideModal();
-  myLib.addBook();
-});
-
-const fields = Array.from(form_modal.elements);
-fields.forEach((field) => {
-  field.addEventListener("input", (e) => {
-    if (!field.checkValidity()) {
-      field.classList.add("invalid");
-      field.classList.remove("valid");
-    } else {
-      field.classList.remove("invalid");
-      field.classList.add("valid");
-    }
-  });
-});
-
-show_stats_button.addEventListener("click", (e) => {
-  curActiveModal = stats_modal;
-  showModal();
-});
-
-add_book_button.addEventListener("click", (e) => {
-  curActiveModal = form_modal;
-  showModal();
-});
-overlay.addEventListener("click", hideModal);
-
-function Book(title, author, pages, haveRead) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.haveRead = haveRead;
-  this.info = function () {
-    return `${this.title} by ${this.author}, ${this.pages} pages, ${
-      this.haveRead ? "read" : "not read yet"
-    }`;
-  };
+function updateReadUnread(read, unread, total) {
+  read_books.textContent = read;
+  unread_books.textContent = unread;
+  total_books.textContent = total;
 }
 
-function createBookCard(book) {
+function formFieldsAllValid() {
+  let formInvalid = false;
+  let focusField = false;
+
+  for (const field of formFields) {
+    if (!field.checkValidity()) {
+      field.classList.add("invalid");
+      if (!focusField) {
+        field.focus();
+        focusField = true;
+      }
+      formInvalid = true;
+    }
+  }
+
+  return !formInvalid;
+}
+
+function resetForm() {
+  name_input.value = "";
+  author_input.value = "";
+  num_pages_input.value = "";
+  has_read_input.value = "unread";
+  formFields.forEach((field) => {
+    field.classList.remove("valid");
+    if (field.checked) {
+      field.checked = false;
+    }
+  });
+}
+
+function createBookCard(book, bookKey) {
   const card = document.createElement("div");
   card.classList.add("card");
-  card.dataset.key = myLib.cur_book_key;
+  card.dataset.key = bookKey;
 
   const book_name = document.createElement("span");
   book_name.textContent = "📔 " + book.title;
@@ -129,42 +173,45 @@ function createBookCard(book) {
   const book_read = document.createElement("button");
   book_read.classList.add(book.haveRead === "read" ? "btnRead" : "btnUnread");
   book_read.textContent = book.haveRead;
-  book_read.addEventListener("click", (e) => {
-    if (book_read.textContent === "read") {
-      book_read.textContent = "unread";
-      book_read.classList.add("btnUnread");
-      book_read.classList.remove("btnRead");
-      myLib.booksUnread++;
-      myLib.booksRead--;
-      myLib.books.get(+card.dataset.key).haveRead = "unread";
-    } else {
-      book_read.textContent = "read";
-      book_read.classList.add("btnRead");
-      book_read.classList.remove("btnUnread");
-      myLib.booksRead++;
-      myLib.booksUnread--;
-      myLib.books.get(+card.dataset.key).haveRead = "read";
-    }
-    read_books.textContent = myLib.booksRead;
-    unread_books.textContent = myLib.booksUnread;
+
+  book_read.addEventListener("click", () => {
+    book_read.classList.toggle("btnUnread");
+    book_read.classList.toggle("btnRead");
+    myLib.update(card.dataset.key);
+    updateReadUnread(myLib.booksRead, myLib.booksUnread, myLib.totalBooks);
+    book_read.textContent =
+      book_read.textContent === "read" ? "unread" : "read";
   });
 
   const remove_btn = document.createElement("button");
   remove_btn.textContent = "Remove";
   remove_btn.addEventListener("click", (e) => {
-    myLib.totalBooks--;
-    total_books.textContent = myLib.totalBooks;
-    if (myLib.books.get(+card.dataset.key).haveRead) {
-      myLib.booksRead--;
-      read_books.textContent = myLib.booksRead;
-    } else {
-      myLib.booksUnread--;
-      unread_books.textContent = myLib.booksUnread;
-    }
-    myLib.books.delete(+card.dataset.key);
+    myLib.removeBook(card.dataset.key);
     card.remove();
+    updateReadUnread(myLib.booksRead, myLib.booksUnread, myLib.totalBooks);
   });
 
   card.append(book_name, book_author, book_pages, book_read, remove_btn);
   book_display.appendChild(card);
 }
+
+form_button.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (!formFieldsAllValid()) return;
+
+  const name = name_input.value.trim();
+  const author = author_input.value.trim();
+  const pages = num_pages_input.value;
+  const has_read = has_read_input.value;
+  const bookKey = `${name.toLowerCase()}+${author.toLowerCase()}`;
+
+  if (myLib.contains(bookKey)) return;
+
+  hideModal();
+
+  const newBook = new Book(name, author, pages, has_read);
+  createBookCard(newBook, bookKey);
+  myLib.addBook(newBook, bookKey);
+  updateReadUnread(myLib.booksRead, myLib.booksUnread, myLib.totalBooks);
+  resetForm();
+});
