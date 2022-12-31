@@ -30,14 +30,28 @@
         <div>
           <label for="book-name">Title</label>
           <input id="book-name" type="text" required />
+          <span
+            id="book-name-error"
+            data-empty="*Please enter the book title"
+            data-duplicate="*This book already exists"
+          ></span>
         </div>
         <div>
           <label for="book-author">Author</label>
           <input id="book-author" type="text" required />
+          <span
+            id="book-author-error"
+            data-empty="*Please enter the book title"
+          ></span>
         </div>
         <div>
           <label for="book-pages">Pages</label>
-          <input id="book-pages" type="number" min="24" required />
+          <input id="book-pages" type="number" min="24" max="10000" required />
+          <span
+            id="book-pages-error"
+            data-empty="*Please enter the number of pages in the book"
+            data-out-range="*Please enter a valid number of pages"
+          ></span>
         </div>
         <div class="checkbox">
           <label for="has-read">Have you read it?</label>

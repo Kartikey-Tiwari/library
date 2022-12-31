@@ -117,6 +117,13 @@ input[type="number"] {
   width: 250px;
 }
 
+input + span {
+  font-size: 14px;
+  font-weight: bold;
+  color: red;
+  width: 250px;
+}
+
 .modal div input[type="checkbox"] {
   flex-grow: 0;
   display: inline-block;

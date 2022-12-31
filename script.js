@@ -70,20 +70,30 @@ class Book {
     }`;
   }
 }
-
 const formFields = Array.from(form_modal.elements);
 formFields.forEach((field) => {
+  const err = field.nextElementSibling;
   field.addEventListener("input", (e) => {
     if (!field.checkValidity()) {
-      field.classList.add("invalid");
-      field.classList.remove("valid");
+      if (field.classList.contains("valid")) {
+        err.textContent = err.dataset.empty;
+        if (
+          field.id === "book-pages" &&
+          (field.value < field.min || field.value > field.max)
+        )
+          err.textContent = err.dataset.outRange;
+        field.classList.remove("valid");
+        field.classList.add("invalid");
+      }
     } else {
+      if (err) err.textContent = "";
       field.classList.remove("invalid");
       field.classList.add("valid");
     }
   });
   field.addEventListener("blur", () => {
     if (!field.checkValidity()) {
+      err.textContent = err.dataset.empty;
       field.classList.add("invalid");
     }
   });
@@ -130,6 +140,7 @@ function formFieldsAllValid() {
   let focusField = false;
 
   for (const field of formFields) {
+    field.blur();
     if (!field.checkValidity()) {
       field.classList.add("invalid");
       if (!focusField) {
@@ -150,6 +161,8 @@ function resetForm() {
   has_read_input.value = "unread";
   formFields.forEach((field) => {
     field.classList.remove("valid");
+    const err = field.nextElementSibling;
+    if (err) err.textContent = "";
     if (field.checked) {
       field.checked = false;
     }
@@ -205,7 +218,15 @@ form_button.addEventListener("click", (e) => {
   const has_read = has_read_input.value;
   const bookKey = `${name.toLowerCase()}+${author.toLowerCase()}`;
 
-  if (myLib.contains(bookKey)) return;
+  if (myLib.contains(bookKey)) {
+    formFields[0].nextElementSibling.textContent =
+      formFields[0].nextElementSibling.dataset.duplicate;
+    formFields[0].classList.add("invalid");
+    formFields[0].classList.remove("valid");
+    formFields[1].classList.add("invalid");
+    formFields[1].classList.remove("valid");
+    return;
+  }
 
   hideModal();
 
